@@ -1,280 +1,111 @@
-'use client';
-import Link from 'next/link';
-import { useState, useEffect, useRef } from 'react';
-import { signOut, useSession } from 'next-auth/react';
-import { useRouter } from 'next/navigation';
-import { ShoppingCart } from 'lucide-react';
-import { useCart } from '@/app/providers';
+"use client";
+
+import { useState } from 'react';
+import { usePathname, useRouter } from 'next/navigation';
+import { Menu, X, ChevronDown } from 'lucide-react';
+import { colors } from './colors';
+import { useProductsTab } from './ProductsTabContext';
+
+const PRODUCT_ITEMS = [
+  { key: 'embedded', label: 'Embedded Systems' },
+  { key: 'ai', label: 'Agentic AI Stack' },
+  { key: 'iot', label: 'Internet of Things' },
+  { key: 'vlsi', label: 'VLSI Design' }
+];
 
 export default function Nav() {
-    const [isOpen, setIsOpen] = useState(false);
-    const [dropdownOpen, setDropdownOpen] = useState(false);
-    const dropdownRef = useRef(null);
-    const router = useRouter();
-    
-    // Use useSession hook for real-time reactivity
-    const { data: session, status } = useSession();
-    
-    // Get cart count from context
-    const { cartCount } = useCart();
+  const [mobileOpen, setMobileOpen] = useState(false);
+  const [productsOpen, setProductsOpen] = useState(false);
+  const pathname = usePathname();
+  const router = useRouter();
+  const { activeTab, setActiveTab } = useProductsTab();
 
-    // Close dropdown when clicking outside
-    useEffect(() => {
-        function handleClickOutside(event) {
-            if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
-                setDropdownOpen(false);
-            }
+  const isActive = (path) => pathname === path;
+  const isProductPage = pathname === '/products';
+
+  const navBtn = (active) => ({
+    padding: '10px 18px', borderRadius: 8, fontWeight: 600, fontSize: 14,
+    background: active ? 'rgba(212,165,55,0.14)' : 'transparent',
+    color: active ? colors.gold : '#C7D0DE', border: 'none', cursor: 'pointer', fontFamily: "'IBM Plex Sans',sans-serif", whiteSpace: 'nowrap'
+  });
+  const mobBtn = (active) => ({
+    padding: '12px 16px', borderRadius: 8, fontWeight: 600, fontSize: 14.5, textAlign: 'left',
+    background: active ? 'rgba(212,165,55,0.14)' : 'transparent',
+    color: active ? colors.gold : '#C7D0DE', border: 'none', cursor: 'pointer', fontFamily: "'IBM Plex Sans',sans-serif"
+  });
+  const subBtn = (active) => ({
+    display: 'block', width: '100%', textAlign: 'left', padding: '11px 16px', borderRadius: 6,
+    background: active ? 'rgba(212,165,55,0.12)' : 'transparent', color: active ? colors.gold : '#DCE3EE',
+    border: 'none', cursor: 'pointer', fontSize: 14, fontWeight: 500, fontFamily: "'IBM Plex Sans',sans-serif"
+  });
+
+  const click = (path) => {
+    router.push(path);
+    setMobileOpen(false);
+    setProductsOpen(false);
+    window.scrollTo(0, 0);
+  };
+
+  const clickProduct = (key) => {
+    setActiveTab(key);
+    if (pathname !== '/products') {
+      router.push('/products');
+    }
+    setMobileOpen(false);
+    setProductsOpen(false);
+    window.scrollTo(0, 0);
+  };
+
+  return (
+    <nav style={{ position: 'sticky', top: 0, zIndex: 50, background: 'rgba(11,30,54,0.92)', backdropFilter: 'blur(10px)', borderBottom: '1px solid rgba(212,165,55,0.18)' }}>
+      <div style={{ maxWidth: 1280, margin: '0 auto', padding: '0 32px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', height: 84 }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 4 }} className="nav-desktop">
+          <button onClick={() => click('/')} className="nav-link-anim" style={navBtn(isActive('/'))}>Home</button>
+          <button onClick={() => click('/about')} className="nav-link-anim" style={navBtn(isActive('/about'))}>About</button>
+          <div style={{ position: 'relative' }}>
+            <button onClick={() => setProductsOpen(v => !v)} className="nav-link-anim" style={navBtn(isProductPage)}>
+              <span style={{ display: 'flex', alignItems: 'center', gap: 6 }}>Products <ChevronDown size={13} /></span>
+            </button>
+            {productsOpen && (
+              <div style={{ position: 'absolute', top: 'calc(100% + 8px)', left: 0, background: colors.navy, border: '1px solid rgba(212,165,55,0.25)', borderTop: `3px solid ${colors.gold}`, borderRadius: 10, padding: 8, minWidth: 210, boxShadow: '0 20px 40px rgba(0,0,0,0.4)', zIndex: 60 }}>
+                {PRODUCT_ITEMS.map(item => (
+                  <button key={item.key} onClick={() => clickProduct(item.key)} style={subBtn(isProductPage && activeTab === item.key)}>{item.label}</button>
+                ))}
+              </div>
+            )}
+          </div>
+          <button onClick={() => click('/insights')} className="nav-link-anim" style={navBtn(isActive('/insights'))}>Insights</button>
+          <button onClick={() => click('/careers')} className="nav-link-anim" style={navBtn(isActive('/careers'))}>Careers</button>
+          <button onClick={() => click('/contact')} data-magnetic="1" className="btn-anim" style={{ padding: '10px 22px', marginLeft: 8, borderRadius: 8, fontWeight: 600, fontSize: 14, background: colors.gold, color: colors.navy, border: 'none', cursor: 'pointer', fontFamily: "'IBM Plex Sans',sans-serif" }}>Contact Us</button>
+        </div>
+
+        <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
+          <button onClick={() => setMobileOpen(v => !v)} className="nav-mobile-btn" style={{ display: 'none', background: 'none', border: 'none', color: '#fff', cursor: 'pointer', padding: 8 }}>
+            {mobileOpen ? <X size={26} /> : <Menu size={26} />}
+          </button>
+          <img onClick={() => click('/')} src="/ALIAXES.png" alt="Aliaxes Technologies" style={{ height: 52, width: 'auto', objectFit: 'contain', cursor: 'pointer', borderRadius: 8 }} />
+        </div>
+      </div>
+
+      {mobileOpen && (
+        <div style={{ padding: '8px 20px 20px', display: 'flex', flexDirection: 'column', gap: 6, borderTop: '1px solid rgba(212,165,55,0.15)' }}>
+          <button onClick={() => click('/')} style={mobBtn(isActive('/'))}>Home</button>
+          <button onClick={() => click('/about')} style={mobBtn(isActive('/about'))}>About</button>
+          {PRODUCT_ITEMS.map(item => (
+            <button key={item.key} onClick={() => clickProduct(item.key)} style={mobBtn(isProductPage && activeTab === item.key)}>{item.label}</button>
+          ))}
+          <button onClick={() => click('/insights')} style={mobBtn(isActive('/insights'))}>Insights</button>
+          <button onClick={() => click('/careers')} style={mobBtn(isActive('/careers'))}>Careers</button>
+          <button onClick={() => click('/contact')} style={mobBtn(isActive('/contact'))}>Contact Us</button>
+        </div>
+      )}
+
+      <style>{`
+        @media (max-width: 900px) {
+          .nav-desktop { display: none !important; }
+          .nav-mobile-btn { display: inline-flex !important; }
         }
-        document.addEventListener('mousedown', handleClickOutside);
-        return () => document.removeEventListener('mousedown', handleClickOutside);
-    }, []);
-
-    const handleLogout = async () => {
-        setDropdownOpen(false);
-        
-        await signOut({ 
-            redirect: false,
-            callbackUrl: '/login'
-        });
-        
-        // Clear cookies and storage
-        document.cookie.split(";").forEach((c) => {
-            document.cookie = c
-                .replace(/^ +/, "")
-                .replace(/=.*/, "=;expires=" + new Date().toUTCString() + ";path=/");
-        });
-        sessionStorage.clear();
-        
-        router.push('/login');
-        router.refresh();
-    };
-
-    return (
-        <nav className="bg-black text-white">
-        
-            <div className="max-w-7xl mx-auto px-6 lg:px-8">
-                <div className="flex justify-between items-center h-20">
-                    {/* Logo */}
-                    <Link href="/" className="text-3xl font-bold tracking-wider hover:text-gray-300 transition">
-                        FASHIO
-                    </Link>
-
-                    {/* Center Navigation Links */}
-                    <div className="hidden md:flex items-center space-x-12">
-                        <Link
-                            href="/men"
-                            className="text-base font-light tracking-wide hover:text-gray-100 hover:scale-110 transition uppercase"
-                        >
-                            Men
-                        </Link>
-                        <Link
-                            href="/women"
-                            className="text-base font-light tracking-wide hover:text-gray-100 hover:scale-110 transition uppercase"
-                        >
-                            Women
-                        </Link>
-                        <Link
-                            href="/kids"
-                            className="text-base font-light tracking-wide hover:text-gray-100 hover:scale-110 transition uppercase"
-                        >
-                            Kids
-                        </Link>
-                    </div>
-
-                    {/* Right Side - Cart, Login, Register OR User Dropdown */}
-                    <div className="hidden md:flex items-center space-x-8">
-                        <Link
-                            href="/cart"
-                            className="relative text-base font-light tracking-wide hover:text-gray-100 hover:scale-110 transition"
-                        >
-                            <ShoppingCart size={22} />
-                            {cartCount > 0 && (
-                                <span className="absolute -top-2 -right-2 bg-red-600 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center font-medium">
-                                    {cartCount}
-                                </span>
-                            )}
-                        </Link>
-                        
-                        {status === 'loading' ? (
-                            <div className="text-base font-light tracking-wide animate-pulse">
-                                Loading...
-                            </div>
-                        ) : session?.user ? (
-                            // Logged in user dropdown
-                            <div className="relative" ref={dropdownRef}>
-                                <button
-                                    onClick={() => setDropdownOpen(!dropdownOpen)}
-                                    className="flex items-center space-x-2 text-base font-light tracking-wide hover:text-gray-100 transition"
-                                >
-                                    <span>Hi, {session.user.name || session.user.email}</span>
-                                    <svg 
-                                        className={`w-4 h-4 transition-transform ${dropdownOpen ? 'rotate-180' : ''}`}
-                                        fill="none" 
-                                        stroke="currentColor" 
-                                        viewBox="0 0 24 24"
-                                    >
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                                    </svg>
-                                </button>
-                                
-                                {/* Dropdown Menu */}
-                                {dropdownOpen && (
-                                    <div className="absolute right-0 mt-2 w-48 bg-white text-black rounded-md shadow-lg py-1 z-50">
-                                        <Link
-                                            href="/dashboard"
-                                            className="block px-4 py-2 text-sm hover:bg-gray-100 transition"
-                                            onClick={() => setDropdownOpen(false)}
-                                        >
-                                            Dashboard
-                                        </Link>
-                                        <Link
-                                            href="/orders"
-                                            className="block px-4 py-2 text-sm hover:bg-gray-100 transition"
-                                            onClick={() => setDropdownOpen(false)}
-                                        >
-                                            Orders
-                                        </Link>
-                                        <hr className="my-1" />
-                                        <button
-                                            onClick={handleLogout}
-                                            className="block w-full text-left px-4 py-2 text-sm hover:bg-gray-100 transition text-red-600"
-                                        >
-                                            Logout
-                                        </button>
-                                    </div>
-                                )}
-                            </div>
-                        ) : (
-                            // Guest user menu
-                            <>
-                                <Link
-                                    href="/login"
-                                    className="text-base font-light tracking-wide hover:text-gray-100 hover:scale-110 transition"
-                                >
-                                    Login
-                                </Link>
-                                <Link
-                                    href="/register"
-                                    className="border border-white px-6 py-2 text-sm font-light tracking-wider hover:scale-110 hover:bg-white hover:text-black transition uppercase"
-                                >
-                                    Register
-                                </Link>
-                            </>
-                        )}
-                    </div>
-
-                    {/* Mobile menu button */}
-                    <button
-                        onClick={() => setIsOpen(!isOpen)}
-                        className="md:hidden focus:outline-none"
-                    >
-                        <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            {isOpen ? (
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                            ) : (
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-                            )}
-                        </svg>
-                    </button>
-                </div>
-
-                {/* Mobile Menu */}
-                {isOpen && (
-                    <div className="md:hidden pb-6 space-y-4">
-                        <Link
-                            href="/men"
-                            className="block text-base font-light tracking-wide hover:text-gray-300 transition uppercase"
-                            onClick={() => setIsOpen(false)}
-                        >
-                            Men
-                        </Link>
-                        <Link
-                            href="/women"
-                            className="block text-base font-light tracking-wide hover:text-gray-300 transition uppercase"
-                            onClick={() => setIsOpen(false)}
-                        >
-                            Women
-                        </Link>
-                        <Link
-                            href="/kids"
-                            className="block text-base font-light tracking-wide hover:text-gray-300 transition uppercase"
-                            onClick={() => setIsOpen(false)}
-                        >
-                            Kids
-                        </Link>
-                        <div className="border-t border-gray-700 pt-4 space-y-4">
-                            <Link
-                                href="/cart"
-                                className="block text-base font-light tracking-wide hover:text-gray-300 transition"
-                                onClick={() => setIsOpen(false)}
-                            >
-                                Cart ({cartCount})
-                            </Link>
-                            
-                            {status === 'loading' ? (
-                                <div className="block text-base font-light tracking-wide text-gray-300 animate-pulse">
-                                    Loading...
-                                </div>
-                            ) : session?.user ? (
-                                // Mobile logged in menu
-                                <>
-                                    <div className="block text-base font-light tracking-wide text-gray-300">
-                                        Hi, {session.user.name || session.user.email}
-                                    </div>
-                                    <Link
-                                        href="/dashboard"
-                                        className="block text-base font-light tracking-wide hover:text-gray-300 transition"
-                                        onClick={() => setIsOpen(false)}
-                                    >
-                                        Dashboard
-                                    </Link>
-                                    <Link
-                                        href="/profile"
-                                        className="block text-base font-light tracking-wide hover:text-gray-300 transition"
-                                        onClick={() => setIsOpen(false)}
-                                    >
-                                        Profile
-                                    </Link>
-                                    <Link
-                                        href="/orders"
-                                        className="block text-base font-light tracking-wide hover:text-gray-300 transition"
-                                        onClick={() => setIsOpen(false)}
-                                    >
-                                        Orders
-                                    </Link>
-                                    <button
-                                        onClick={() => {
-                                            setIsOpen(false);
-                                            handleLogout();
-                                        }}
-                                        className="block w-full border border-white px-6 py-2 text-sm font-light tracking-wider hover:bg-white hover:text-black transition uppercase text-center"
-                                    >
-                                        Logout
-                                    </button>
-                                </>
-                            ) : (
-                                // Mobile guest menu
-                                <>
-                                    <Link
-                                        href="/login"
-                                        className="block text-base font-light tracking-wide hover:text-gray-300 transition"
-                                        onClick={() => setIsOpen(false)}
-                                    >
-                                        Login
-                                    </Link>
-                                    <Link
-                                        href="/register"
-                                        className="block border border-white px-6 py-2 text-sm font-light tracking-wider hover:bg-white hover:text-black transition uppercase text-center"
-                                        onClick={() => setIsOpen(false)}
-                                    >
-                                        Register
-                                    </Link>
-                                </>
-                            )}
-                        </div>
-                    </div>
-                )}
-            </div>
-        </nav>
-    );
+      `}</style>
+    </nav>
+  );
 }
