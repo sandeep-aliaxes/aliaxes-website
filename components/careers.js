@@ -69,9 +69,9 @@ export default function Careers() {
             <h2 className="cw-h2" style={{ fontFamily: "'Space Grotesk',sans-serif", fontSize: 27, fontWeight: 700, color: '#fff', margin: '0 0 18px' }}>We're Not Hiring Right Now</h2>
             <p style={{ color: '#C7D0DE', fontSize: 16.5, lineHeight: 1.7, margin: '0 0 12px', maxWidth: '100%', width: 560, marginLeft: 'auto', marginRight: 'auto', boxSizing: 'border-box' }}>Thanks for your interest! We don't have open positions at the moment, but we'd love to hear from talented professionals.</p>
             <p style={{ color: '#8FA0BC', fontSize: 15, lineHeight: 1.7, margin: '0 0 32px', maxWidth: '100%', width: 560, marginLeft: 'auto', marginRight: 'auto', boxSizing: 'border-box' }}>When exciting opportunities open up, we'll reach out.</p>
-            <p style={{ color: '#DCE3EE', fontSize: 15, margin: '0 0 20px' }}><strong>Email us at:</strong> <span style={{ color: colors.gold, fontWeight: 600 }}>sandeep@aliaxestech.com</span></p>
+            <p style={{ color: '#DCE3EE', fontSize: 15, margin: '0 0 20px' }}><strong>Email us at:</strong> <span style={{ color: colors.gold, fontWeight: 600 }}>sales@aliaxestech.com</span></p>
             <a
-              href="mailto:sandeep@aliaxestech.com"
+              href="mailto:sales@aliaxestech.com"
               className="cw-btn-anim"
               style={{
                 display: 'inline-block',
