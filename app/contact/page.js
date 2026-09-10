@@ -1,4 +1,4 @@
-import Contact from "../../components/contact";
+import Contact from "../../components/Contactnew";
 
 export const metadata = {
   title: "Contact Us | Aliaxes Technologies",
