@@ -10,12 +10,7 @@ const PRODUCT_ITEMS = [
   { key: 'embedded', label: 'Embedded Systems & IoT' },
   { key: 'edge-ai', label: 'Edge AI, AIoT & Vision AI' },
   { key: 'quantum', label: 'Quantum Machine Learning' },
-  { key: 'vlsi', label: 'VLSI & FPGA' },
-  { key: 'test-measurement', label: 'Test & Measurement' },
-  { key: 'pcb', label: 'PCB Design & Prototyping' },
-  { key: 'automation', label: 'Industrial Automation & EV' },
-  { key: 'idea-lab', label: 'AICTE IDEA Lab' },
-  { key: 'smt', label: 'SMT Solutions' }
+  { key: 'vlsi', label: 'VLSI & FPGA' }
 ];
 
 export default function Nav() {

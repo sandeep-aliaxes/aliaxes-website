@@ -8,8 +8,8 @@ import { useProductsTab } from './ProductsTabContext';
 
 const DOMAINS = [
   { key: 'embedded', title: 'Embedded Systems & IoT', src: '/embedded-systems-iot.webp', badge: 'Domain 01',
-    desc: 'Raspberry Pi, Arduino, IoT trainer kits and LoRaWAN: complete embedded systems and IoT laboratories for programming, sensing, connectivity and edge projects.',
-    features: ['Raspberry Pi Lab: Pi 3 B+, Pi 4 & Pi 5', 'Arduino Lab: UNO, UNO Q & VENTUNO Q', 'IoT Trainer Kits: Experience, Pro, Lite, Medical & Robotics', 'LoRaWAN Gateways & Nodes'] },
+    desc: 'Raspberry Pi and Arduino laboratories for programming, sensing, connectivity and edge projects, useful across multiple departments.',
+    features: ['Raspberry Pi Lab: Pi 3 B+, Pi 4 & Pi 5', 'Arduino Lab: UNO, UNO Q & VENTUNO Q', 'Sensor Interfacing & IoT Projects', 'Computer Vision & Edge AI Projects'] },
   { key: 'edge-ai', title: 'Edge AI, AIoT & Vision AI', src: '/edge-ai-aiot-vision-ai.webp', badge: 'Domain 02',
     desc: 'On-device AI labs and Centres of Excellence on STMicroelectronics: low-power machine learning, connected intelligence and real-time vision.',
     features: ['Edge AI Lab: Low-power ML on Microcontrollers', 'AIoT Lab: Wi-Fi, Bluetooth & Cloud Dashboards', 'Vision AI Lab: Real-time Object Detection', 'Centre of Excellence: 15 Edge AI + 15 AIoT + 10 Vision AI Seats'] },
@@ -18,27 +18,12 @@ const DOMAINS = [
     features: ['Simulators & Real Quantum Hardware Access', '10 Structured Experiments with Manuals & Datasets', 'PennyLane & Qiskit with Python Code Export', 'Guided Courses, Faculty & Student Training'] },
   { key: 'vlsi', title: 'VLSI & FPGA', src: '/vlsi-fpga.webp', badge: 'Domain 04',
     desc: 'Digilent and Xilinx FPGA platforms for digital design, from first digital-logic labs to advanced VLSI projects.',
-    features: ['Digilent FPGA Boards', 'Spartan, Artix-7 & Zynq Platforms', 'Industry-standard Design Flow', 'Digital Design & VLSI Labs'] },
-  { key: 'test-measurement', title: 'Test & Measurement', src: '/test-measurement.webp', badge: 'Domain 05',
-    desc: 'Oscilloscopes and Analog Discovery instruments for electronics, communication and embedded systems laboratories.',
-    features: ['Digital Storage Oscilloscopes', 'Digilent Analog Discovery Series', 'Data Acquisition (DAQ)', 'Complete Lab Bench Setups'] },
-  { key: 'pcb', title: 'PCB Design & Prototyping', src: '/pcb-design-prototyping.webp', badge: 'Domain 06',
-    desc: 'PCB prototyping machine, soldering and assembly: take students from schematic to finished board in-house.',
-    features: ['PCB Prototyping Machine: Drill, Engrave & Route', 'Gerber & G-Code Support', 'Soldering Station & Power Supply', 'PCB Assembly & Project Services'] },
-  { key: 'automation', title: 'Industrial Automation & EV', src: '/industrial-automation-ev.webp', badge: 'Domain 07',
-    desc: 'PLC, robotic automation, EV and BMS workbenches for industry-grade automation and electric-vehicle training.',
-    features: ['PLC Programming Workbench with HMI', 'Robotic Automation', '2-Wheeler EV Workbench', 'Battery Management System Trainer'] },
-  { key: 'idea-lab', title: 'AICTE IDEA Lab', src: '/aicte-idea-lab.webp', badge: 'Domain 08',
-    desc: 'Complete IDEA Lab setup as per AICTE guidelines: a hands-on space for students to design, prototype and build real projects.',
-    features: ['CNC Router, Mini Lathe & Milling', '3D Printer & 3D Scanner', 'PCB Prototyping & Test Equipment', 'Planning, Supply, Installation & Training'] },
-  { key: 'smt', title: 'SMT Solutions', src: '/smt-solutions.webp', badge: 'Domain 09',
-    desc: 'Pick & place and reflow for electronics manufacturing: teach and run small-batch SMT assembly in-house.',
-    features: ['SMT Pick & Place Machine', 'Table-top Reflow Oven', 'Solder Paste to Inspection Workflow', 'Prototyping & Small-batch Production'] }
+    features: ['Digilent FPGA Boards', 'Spartan, Artix-7 & Zynq Platforms', 'Industry-standard Design Flow', 'Digital Design & VLSI Labs'] }
 ];
 
 const PRODUCTS_DATA = Object.fromEntries(DOMAINS.map(d => [d.key, { title: d.title }]));
 // Older links (e.g. /products?tab=iot) open the closest current domain
-const TAB_ALIASES = { iot: 'embedded', ai: 'edge-ai', 'pcb-smt': 'pcb', wireless: 'test-measurement' };
+const TAB_ALIASES = { iot: 'embedded', ai: 'edge-ai' };
 
 export default function Products() {
   const searchParams = useSearchParams();
