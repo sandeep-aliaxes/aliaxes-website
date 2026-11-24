@@ -12,7 +12,6 @@ const PRODUCT_ITEMS = [
   { key: 'quantum', label: 'Quantum Machine Learning' },
   { key: 'vlsi', label: 'VLSI & FPGA' },
   { key: 'test-measurement', label: 'Test & Measurement' },
-  { key: 'wireless', label: 'Wireless Communication' },
   { key: 'pcb', label: 'PCB Design & Prototyping' },
   { key: 'automation', label: 'Industrial Automation & EV' },
   { key: 'idea-lab', label: 'AICTE IDEA Lab' },
