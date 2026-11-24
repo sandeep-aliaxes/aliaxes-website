@@ -8,9 +8,15 @@ import { useProductsTab } from './ProductsTabContext';
 
 const PRODUCT_ITEMS = [
   { key: 'embedded', label: 'Embedded Systems' },
+  { key: 'edge-ai', label: 'Edge AI Labs' },
   { key: 'ai', label: 'Agentic AI Stack' },
+  { key: 'quantum', label: 'Quantum Computing' },
   { key: 'iot', label: 'Internet of Things' },
-  { key: 'vlsi', label: 'VLSI Design' }
+  { key: 'vlsi', label: 'VLSI Design' },
+  { key: 'test-measurement', label: 'Test & Measurement' },
+  { key: 'pcb-smt', label: 'PCB Design & SMT' },
+  { key: 'automation', label: 'Automation & EV' },
+  { key: 'idea-lab', label: 'AICTE IDEA Lab' }
 ];
 
 export default function Nav() {

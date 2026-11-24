@@ -30,18 +30,20 @@ const FeatureCard = ({ badge, badgeBg, badgeColor, title, desc, features }) => (
   </div>
 );
 
-const ProductImage = ({ src, label, dark }) => (
+const ProductImage = ({ src, label, dark, fit }) => (
   <div data-reveal="1" className="hover-lift img-zoom product-image" style={{
     borderRadius: 18,
     position: 'relative',
     overflow: 'hidden',
-    background: dark ? 'repeating-linear-gradient(135deg,#0F2847,#0F2847 10px,#12305A 10px,#12305A 20px)' : 'repeating-linear-gradient(135deg,#E4E9F0,#E4E9F0 10px,#D8DEE7 10px,#D8DEE7 20px)'
+    background: fit === 'contain' ? '#FFFFFF' : dark ? 'repeating-linear-gradient(135deg,#0F2847,#0F2847 10px,#12305A 10px,#12305A 20px)' : 'repeating-linear-gradient(135deg,#E4E9F0,#E4E9F0 10px,#D8DEE7 10px,#D8DEE7 20px)',
+    border: fit === 'contain' ? `1px solid ${colors.border}` : undefined
   }}>
     {src ? (
       <img
         src={src}
         alt={label}
-        style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+        loading="lazy"
+        style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: fit === 'contain' ? 'contain' : 'cover', display: 'block' }}
       />
     ) : (
       <span style={{
@@ -52,11 +54,39 @@ const ProductImage = ({ src, label, dark }) => (
   </div>
 );
 
+const ProductRow = ({ reverse, src, label, fit = 'contain', dark, ...card }) => (
+  <div data-reveal="1" className="product-row">
+    {reverse ? (
+      <>
+        <div className="product-row-reverse-1"><FeatureCard {...card} /></div>
+        <div className="product-row-reverse-2"><ProductImage src={src} label={label} fit={fit} dark={dark} /></div>
+      </>
+    ) : (
+      <>
+        <ProductImage src={src} label={label} fit={fit} dark={dark} />
+        <FeatureCard {...card} />
+      </>
+    )}
+  </div>
+);
+
+const LAB = { badge: 'Lab Setup', badgeBg: '#F7F2E4', badgeColor: '#B8862A' };
+const KIT = { badge: 'Trainer Kit', badgeBg: '#F7F2E4', badgeColor: '#B8862A' };
+const AILAB = { badge: 'AI Lab', badgeBg: 'rgba(212,165,55,0.15)', badgeColor: colors.gold };
+const PLATFORM = { badge: 'Platform', badgeBg: '#EAF0F9', badgeColor: '#3A6CB0' };
+const EQUIP = { badge: 'Equipment', badgeBg: '#EAF0F9', badgeColor: '#3A6CB0' };
+
 const PRODUCTS_DATA = {
   embedded: { title: 'Embedded Systems' },
+  'edge-ai': { title: 'Edge AI Labs' },
   ai: { title: 'Agentic AI Stack' },
+  quantum: { title: 'Quantum Computing' },
   iot: { title: 'Internet of Things' },
-  vlsi: { title: 'VLSI Design' }
+  vlsi: { title: 'VLSI Design' },
+  'test-measurement': { title: 'Test & Measurement' },
+  'pcb-smt': { title: 'PCB Design & SMT' },
+  automation: { title: 'Automation & EV' },
+  'idea-lab': { title: 'AICTE IDEA Lab' }
 };
 
 
@@ -108,6 +138,29 @@ export default function Products() {
               </div>
               <div className="product-row-reverse-2"><ProductImage src="/ST.png" label="ST Kit" /></div>
             </div>
+            <ProductRow src="/raspberry-pi-lab.jpg" label="Raspberry Pi Lab with Raspberry Pi 3, 4 and 5" {...LAB} title="Raspberry Pi Lab"
+              desc="Linux single-board computer lab for programming, IoT, computer vision and edge AI, useful across multiple departments. Students progress from Raspberry Pi 3 Model B+ to Raspberry Pi 4 and Raspberry Pi 5."
+              features={['Raspberry Pi 3 Model B+, 4 Model B & 5', 'Linux & Python Programming', 'Camera, OpenCV & Object Detection', 'IoT, GPIO & Cloud Dashboards']} />
+            <ProductRow reverse src="/arduino-lab.jpg" label="Arduino Lab with Arduino UNO, UNO Q and VENTUNO Q" {...LAB} title="Arduino Lab"
+              desc="From embedded fundamentals to Linux-powered edge AI and robotics on Arduino's latest platforms, with Arduino UNO for basics, UNO Q for Linux plus real-time control, and VENTUNO Q for edge AI."
+              features={['Arduino UNO: Embedded & Sensor Basics', 'Arduino UNO Q: Linux + Real-time MCU', 'Arduino VENTUNO Q: Edge AI & Robotics', 'Multi-department Lab Setup']} />
+            <ProductRow src="/iot-trainer-kits.jpg" label="IoT Experience, Pro and Lite trainer kits" {...KIT} title="Embedded IoT Trainer Kits"
+              desc="Rugged all-in-one IoT trainer kits with multiple controllers, wireless modules and on-board sensors, available as IoT Experience, IoT Pro and IoT Lite kits."
+              features={['Arduino UNO, ESP32, Raspberry Pi & STM32', 'Wi-Fi, BLE, LoRa & 4G GSM', 'On-board Sensors, Displays & Relays', 'Lab-ready Portable Enclosure']} />
+            <ProductRow reverse src="/iot-medical-kit.jpg" label="IoT Medical Kit" {...KIT} title="IoT Medical Kit"
+              desc="ESP32-based healthcare IoT kit with Wi-Fi, BLE and 4G GSM for remote patient-monitoring projects."
+              features={['ECG & EMG Sensors', 'Heart Rate & GSR Sensors', 'IR Temperature & CO\u2082 Gas Sensors', 'Remote Patient Monitoring']} />
+            <ProductRow src="/ai-robotic-kit.jpg" label="AI Robotic Development Kit" {...KIT} title="AI Robotic Development Kit"
+              desc="4-wheel Mecanum-drive robot with Raspberry Pi 4B and ESP32 for AI robotics projects."
+              features={['Obstacle Avoidance & Line Following', 'Voice & Mobile Control', '360\u00b0 Rotation with Mecanum Wheels', 'Raspberry Pi 4B + ESP32 Control']} />
+          </div>
+        )}
+
+        {tab === 'edge-ai' && (
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 56 }}>
+            <ProductRow src="/st-edge-ai-aiot-vision-ai-labs.jpg" label="ST Edge AI, AIoT and Vision AI Labs" {...AILAB} title="ST Edge AI, AIoT & Vision AI Labs"
+              desc="STMicroelectronics-based labs for on-device AI, connected intelligence and real-time vision, with curriculum and hands-on training."
+              features={['Edge AI Lab: Low-power ML on Microcontrollers', 'AIoT Lab: Wi-Fi, Bluetooth & Cloud Dashboards', 'Vision AI Lab: Real-time Object Detection', 'Centre of Excellence: 15 Edge AI + 15 AIoT + 10 Vision AI Seats']} />
           </div>
         )}
 
@@ -136,21 +189,80 @@ export default function Products() {
           </div>
         )}
 
+        {tab === 'quantum' && (
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 56 }}>
+            <ProductRow src="/quantum-machine-learning-lab.jpg" label="Quantum Machine Learning Laboratory" fit="cover" {...AILAB} badge="Quantum Lab" title="Quantum Machine Learning Laboratory"
+              desc="A browser-based QML lab in your existing computer lab: from data to qubits to working applications, with no quantum hardware to install."
+              features={['Simulators & Real Quantum Hardware Access', '10 Structured Experiments with Manuals & Datasets', 'PennyLane & Qiskit with Python Code Export', 'VQC, QNN, QSVM, QCNN, QAOA & VQE']} />
+            <ProductRow reverse src="/quantum-computing-lab.jpg" label="Quantum Computing Lab with IBM Qiskit" fit="cover" {...AILAB} badge="Quantum Lab" title="Quantum Computing Lab"
+              desc="Hands-on quantum computing with IBM Qiskit, covering quantum fundamentals, cryptography, algorithms and machine learning."
+              features={['Qubits, Gates, Superposition & Entanglement', 'Quantum Key Distribution & Secure Communication', 'Foundational Quantum Algorithms', 'Quantum Circuits for Machine Learning']} />
+          </div>
+        )}
+
         {tab === 'iot' && (
-          <div data-reveal="1" className="product-row">
-            <ProductImage src="/IoT.png" label="IoT Suite" />
-            <FeatureCard badge="Platform" badgeBg="#EAF0F9" badgeColor="#3A6CB0" title="IoT Solution Suite"
-              desc="End-to-end IoT platform for connecting and managing distributed sensors — including cloud integration, real-time analytics, and secure communication."
-              features={['MQTT / CoAP Protocols', 'Cloud Integration', 'Real-time Analytics', 'Security Protocols']} />
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 56 }}>
+            <div data-reveal="1" className="product-row">
+              <ProductImage src="/IoT.png" label="IoT Suite" />
+              <FeatureCard badge="Platform" badgeBg="#EAF0F9" badgeColor="#3A6CB0" title="IoT Solution Suite"
+                desc="End-to-end IoT platform for connecting and managing distributed sensors — including cloud integration, real-time analytics, and secure communication."
+                features={['MQTT / CoAP Protocols', 'Cloud Integration', 'Real-time Analytics', 'Security Protocols']} />
+            </div>
+            <ProductRow reverse src="/lorawan-gateways-nodes.jpg" label="LoRaWAN gateways, nodes and weather station" {...PLATFORM} badge="Hardware" title="LoRaWAN IoT Gateways & Nodes"
+              desc="Long-range, low-power IoT networking for campus and field deployments, with indoor and outdoor gateways, LoRa node modules and a weather station."
+              features={['LoRa Node Module', 'LoRaWAN Outdoor & Indoor Gateways', 'LoRaWAN Weather Station', 'Long-range, Low-power Networks']} />
           </div>
         )}
 
         {tab === 'vlsi' && (
-          <div data-reveal="1" className="product-row">
-            <ProductImage src="/VLSI.png" label="VLSI Suite" />
-            <FeatureCard badge="Design Suite" badgeBg="#EAF0F9" badgeColor="#3A6CB0" title="VLSI Design Suite"
-              desc="Complete VLSI design and verification environment for semiconductor design — professional tools for digital and analog IC design."
-              features={['Circuit Simulation', 'Design Verification', 'DRC Tools', 'Manufacturing Support']} />
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 56 }}>
+            <div data-reveal="1" className="product-row">
+              <ProductImage src="/VLSI.png" label="VLSI Suite" />
+              <FeatureCard badge="Design Suite" badgeBg="#EAF0F9" badgeColor="#3A6CB0" title="VLSI Design Suite"
+                desc="Complete VLSI design and verification environment for semiconductor design — professional tools for digital and analog IC design."
+                features={['Circuit Simulation', 'Design Verification', 'DRC Tools', 'Manufacturing Support']} />
+            </div>
+            <ProductRow reverse src="/fpga-development-boards.jpg" label="Spartan-6, Spartan-7, Artix-7 and Zynq FPGA boards" {...PLATFORM} badge="Hardware" title="FPGA Development Boards"
+              desc="FPGA development boards for digital design and VLSI labs, with on-board camera, TFT display, 7-segment and I/O for hands-on projects."
+              features={['Spartan-6 & Spartan-7', 'Artix-7', 'Zynq SoC', 'Camera, TFT Display & 7-Segment I/O']} />
+          </div>
+        )}
+
+        {tab === 'test-measurement' && (
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 56 }}>
+            <ProductRow src="/oscilloscope.jpg" label="Digital storage oscilloscope" {...EQUIP} title="Digital Storage Oscilloscopes"
+              desc="Two-channel benchtop oscilloscopes with colour display and built-in signal generator output for electronics, communication and embedded systems laboratories."
+              features={['Analog & Digital Electronics Experiments', 'Signals, Communication & Modulation', 'Power Electronics & Control Systems', 'Embedded & IoT Hardware Debugging']} />
+          </div>
+        )}
+
+        {tab === 'pcb-smt' && (
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 56 }}>
+            <ProductRow src="/pcb-design-lab.jpg" label="PCB Design Lab equipment" {...LAB} title="PCB Design Lab"
+              desc="From schematic to finished board: in-house PCB prototyping, assembly and soldering equipment, with PCB assembly and project services."
+              features={['PCB Prototyping Machine: Drill, Engrave & Route', 'Gerber & G-Code Support, \u00b10.02 mm Accuracy', 'Soldering Station & Programmable Power Supply', 'Components, Sensors & Project Services']} />
+            <ProductRow reverse src="/smt-solutions.jpg" label="SMT pick and place machine and reflow oven" {...EQUIP} title="SMT Solutions"
+              desc="Surface-mount assembly equipment to teach and run small-batch electronics manufacturing in-house."
+              features={['SMT Pick & Place Machine', 'Table-top Reflow Oven', 'Solder Paste to Inspection Workflow', 'Prototyping & Small-batch Production']} />
+          </div>
+        )}
+
+        {tab === 'automation' && (
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 56 }}>
+            <ProductRow src="/plc-robotic-automation.jpg" label="PLC workbench and robotic automation" {...LAB} title="PLC & Robotic Automation"
+              desc="Industry-grade workbenches for PLC programming and industrial robotic automation training."
+              features={['PLC with HMI, Switchgear & I/O', 'Ladder Logic & Sequencing', 'Robotic Arm Pick-and-Place Training', 'Production-line Automation']} />
+            <ProductRow reverse src="/ev-bms-workbench.jpg" label="2-wheeler EV workbench and battery management system trainer" {...LAB} title="EV Workbench & Battery Management System"
+              desc="Complete EV drivetrain and battery-management trainers for hands-on electric-vehicle training in EEE, Mechanical and Mechatronics departments."
+              features={['2-Wheeler EV Drivetrain Workbench', 'Motor, Controller, Battery & Charger', 'BMS Cell Balancing & Protection', 'State-of-charge Estimation']} />
+          </div>
+        )}
+
+        {tab === 'idea-lab' && (
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 56 }}>
+            <ProductRow src="/aicte-idea-lab.jpg" label="AICTE IDEA Lab equipment" {...LAB} title="AICTE IDEA Lab"
+              desc="Complete AICTE IDEA Lab setup aligned with AICTE guidelines: a hands-on space for students to design, prototype and build real projects."
+              features={['CNC Router, Mini Lathe & Milling', '3D Printer & 3D Scanner', 'PCB Prototyping & Test Equipment', 'Planning, Supply, Installation & Training']} />
           </div>
         )}
       </div>
