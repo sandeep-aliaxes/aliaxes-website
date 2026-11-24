@@ -7,16 +7,16 @@ import { colors } from './colors';
 import { useProductsTab } from './ProductsTabContext';
 
 const PRODUCT_ITEMS = [
-  { key: 'embedded', label: 'Embedded Systems' },
-  { key: 'edge-ai', label: 'Edge AI Labs' },
-  { key: 'ai', label: 'Agentic AI Stack' },
-  { key: 'quantum', label: 'Quantum Computing' },
-  { key: 'iot', label: 'Internet of Things' },
-  { key: 'vlsi', label: 'VLSI Design' },
+  { key: 'embedded', label: 'Embedded Systems & IoT' },
+  { key: 'edge-ai', label: 'Edge AI, AIoT & Vision AI' },
+  { key: 'quantum', label: 'Quantum Machine Learning' },
+  { key: 'vlsi', label: 'VLSI & FPGA' },
   { key: 'test-measurement', label: 'Test & Measurement' },
-  { key: 'pcb-smt', label: 'PCB Design & SMT' },
-  { key: 'automation', label: 'Automation & EV' },
-  { key: 'idea-lab', label: 'AICTE IDEA Lab' }
+  { key: 'wireless', label: 'Wireless Communication' },
+  { key: 'pcb', label: 'PCB Design & Prototyping' },
+  { key: 'automation', label: 'Industrial Automation & EV' },
+  { key: 'idea-lab', label: 'AICTE IDEA Lab' },
+  { key: 'smt', label: 'SMT Solutions' }
 ];
 
 export default function Nav() {
